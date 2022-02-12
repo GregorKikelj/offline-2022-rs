@@ -2,10 +2,10 @@ use std::fs;
 
 #[derive(Debug)]
 pub struct TestCase{
-  id: i32,
-  n: i32,
-  col: i32,
-  data: Vec<Vec<i32>>,
+  pub id: i32,
+  pub n: i32,
+  pub col: i32,
+  pub data: Vec<Vec<i32>>,
 }
 
 pub fn import_tc(tc:i32) -> Option<TestCase>{
@@ -20,19 +20,18 @@ pub fn import_tc(tc:i32) -> Option<TestCase>{
   iter.next();
   for i in 1..tc+1{
     iter.next();
-    let actual_tc: i32 = iter.next().expect("File ended before tc was found" ).parse().unwrap();
+    let actual_tc: i32 = iter.next().expect("File ended before tc was found").trim().parse().unwrap();
     if actual_tc != i {
       panic!("Test case doesn't match expected test case");
     }
-    let desc = iter.next().expect("File ended on description line");
-    println!("{}", desc);
+    let desc = iter.next().expect("File ended on description line").trim();
     let ddesc: Vec<&str> = desc.split(" ").collect();
     let w : usize = ddesc[0].parse().unwrap();
     let h : i32 = ddesc[1].parse().unwrap();
     let col : i32 = ddesc[2].parse().unwrap();
     let mut vec : Vec<Vec<i32>> = vec![];
     for _ in 0..h {
-      let line: Vec<&str> = iter.next().expect("Parsing rows, out of lines").split(" ").collect();
+      let line: Vec<&str> = iter.next().expect("Parsing rows, out of lines").trim().split(" ").collect();
       let mut row_vec = vec![];
       for x in 0..w {
         row_vec.push(line[x].parse().unwrap());
