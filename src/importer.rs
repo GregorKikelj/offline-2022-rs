@@ -3,7 +3,6 @@ use std::fs;
 #[derive(Debug)]
 
 pub struct TestCase{
-  /// A person must have a name, no matter how much Juliet may hate it
   pub id: i32,
   pub n: usize,
   pub col: i32,
@@ -20,14 +19,14 @@ pub fn import_tc(tc:i32) -> Option<TestCase>{
   let mut iter = lines.iter();
   iter.next();
   iter.next();
-  for i in 1..tc+1{
+  for i in 1..tc+1 {
     iter.next();
     let actual_tc: i32 = iter.next().expect("File ended before tc was found").trim().parse().unwrap();
     if actual_tc != i {
       panic!("Test case doesn't match expected test case");
     }
     let desc = iter.next().expect("File ended on description line").trim();
-    let ddesc: Vec<&str> = desc.split(" ").collect();
+    let ddesc : Vec<&str> = desc.split(" ").collect();
     let w : usize = ddesc[0].parse().unwrap();
     let h : usize = ddesc[1].parse().unwrap();
     let col : i32 = ddesc[2].parse().unwrap();

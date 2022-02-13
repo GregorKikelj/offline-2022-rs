@@ -12,8 +12,8 @@ pub struct ReducedTC{
 
 impl ReducedTC{
   pub fn convert_tc(tc:TestCase) -> Self{
-    let mut done:Vec<Vec<bool>> = vec![vec![false; tc.n]; tc.n];
-    let mut id:Vec<Vec<i32>> = vec![vec![-1;tc.n];tc.n];
+    let mut done : Vec<Vec<bool>> = vec![vec![false; tc.n]; tc.n];
+    let mut id : Vec<Vec<i32>> = vec![vec![-1;tc.n];tc.n];
     let mut n=0;
     for x in 0..tc.n {
       for y in 0..tc.n {
@@ -21,8 +21,8 @@ impl ReducedTC{
           n+=1;
           let mut bfs = VecDeque::with_capacity(100);
           bfs.push_front((x as i32, y as i32));
-          done[x][y]=true;
-          id[x][y]=n-1;
+          done[x][y] = true;
+          id[x][y] = n-1;
           while !bfs.is_empty(){
             let (x, y) = bfs.pop_back().expect("bfs is not Empty");
             let xi = x as i32;
@@ -44,11 +44,11 @@ impl ReducedTC{
       }
     }
 
-    let n=n as usize;// Now it's not mut anymore
-    let mut edge:Vec<Vec<i32>> = vec![vec![]; n];
-    let mut c:Vec<i8> = vec![-1;n];
-    for x in 0..tc.n{
-      for y in 0..tc.n{
+    let n = n as usize;// Now it's not mut anymore
+    let mut edge : Vec<Vec<i32>> = vec![vec![]; n];
+    let mut c : Vec<i8> = vec![-1;n];
+    for x in 0..tc.n {
+      for y in 0..tc.n {
         let xi = x as i32;
         let yi = y as i32;
         let col = tc.data[x][y];
@@ -58,10 +58,10 @@ impl ReducedTC{
           }
           let id1 = id[x][y];
           c[id1 as usize]=col as i8;
-          if tc.data[x2 as usize][y2 as usize]!=col{
+          if tc.data[x2 as usize][y2 as usize]!=col {
             //Add connection between id and id2
             let id2 = id[x2 as usize][y2 as usize];
-            if !edge[id1 as usize].contains(&(id2 as i32)){
+            if !edge[id1 as usize].contains(&(id2 as i32)) {
               edge[id1 as usize].push(id2 as i32);
             }
           }
@@ -70,7 +70,7 @@ impl ReducedTC{
     }
     //Sort the weights, probably not needed, but it doesn't hurt :)
     //And I don't really care about performance here, it's just a converter between one way of presenting data into another
-    for i in 0..n{
+    for i in 0..n {
       edge[i].sort_unstable();
     }
 
