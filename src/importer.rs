@@ -1,11 +1,13 @@
 use std::fs;
 
 #[derive(Debug)]
+
 pub struct TestCase{
+  /// A person must have a name, no matter how much Juliet may hate it
   pub id: i32,
-  pub n: i32,
+  pub n: usize,
   pub col: i32,
-  pub data: Vec<Vec<i32>>,
+  pub data: Vec<Vec<i32>>, //x, y koordinate
 }
 
 pub fn import_tc(tc:i32) -> Option<TestCase>{
@@ -27,23 +29,21 @@ pub fn import_tc(tc:i32) -> Option<TestCase>{
     let desc = iter.next().expect("File ended on description line").trim();
     let ddesc: Vec<&str> = desc.split(" ").collect();
     let w : usize = ddesc[0].parse().unwrap();
-    let h : i32 = ddesc[1].parse().unwrap();
+    let h : usize = ddesc[1].parse().unwrap();
     let col : i32 = ddesc[2].parse().unwrap();
-    let mut vec : Vec<Vec<i32>> = vec![];
-    for _ in 0..h {
+    let mut vec : Vec<Vec<i32>> = vec![vec![0;h];w];
+    for y in 0..h {
       let line: Vec<&str> = iter.next().expect("Parsing rows, out of lines").trim().split(" ").collect();
-      let mut row_vec = vec![];
       for x in 0..w {
-        row_vec.push(line[x].parse().unwrap());
+        vec[x][y]=line[x].parse().unwrap();
       }
-      vec.push(row_vec);
     }
 
     if actual_tc == tc {
       return Some(
         TestCase{
           id: tc,
-          n : h,
+          n : h as usize,
           col : col,
           data : vec,
         }
