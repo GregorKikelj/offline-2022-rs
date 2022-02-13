@@ -1,5 +1,6 @@
 use crate::importer::TestCase;
 use std::collections::VecDeque;
+use rand::Rng;
 
 ///Id, n, c(number of colors), col(node colors), edge(edges), 
 pub struct ReducedTC{
@@ -83,3 +84,33 @@ impl ReducedTC{
     };
   }
 }
+
+
+fn add_color(tc:&ReducedTC, done:&mut Vec<bool>, col:i8) -> i32{
+  let mut cnt=0;
+  for i in 0..tc.n {
+    if done[i] {
+      for j in &tc.edge[i] {
+        if tc.c[*j as usize]==col && !done[*j as usize] {
+          done[*j as usize] = true;
+          cnt+=1;
+        }
+      }
+    }
+  }
+  return cnt;
+}
+pub fn random_move_solver(tc:ReducedTC) -> Vec<i8>{
+  let mut ans = vec![];
+  let mut done = vec![false; tc.n];
+  done[0]=true;
+  let mut cnt_done : i32 = 1;
+  while cnt_done < tc.n as i32 {
+    let color:i8 = (rand::thread_rng().gen_range(0..tc.col) + 1) as i8;
+    let d = add_color(&tc, &mut done, color);
+    cnt_done += d;
+    ans.push(color);
+  }
+  return ans;
+}
+
