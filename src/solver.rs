@@ -4,7 +4,7 @@ use rand::Rng;
 
 ///Id, n, c(number of colors), col(node colors), edge(edges), 
 pub struct ReducedTC{
-  pub id: i32,
+  pub id: i8,
   pub n: usize,
   pub col: i32,
   pub c:Vec<i8>,

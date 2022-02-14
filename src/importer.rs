@@ -3,13 +3,13 @@ use std::fs;
 #[derive(Debug)]
 
 pub struct TestCase {
-    pub id: i32,
+    pub id: i8,
     pub n: usize,
     pub col: i32,
     pub data: Vec<Vec<i32>>, //x, y koordinate
 }
 
-pub fn import_tc(tc: i32) -> Option<TestCase> {
+pub fn import_tc(tc: i8) -> Option<TestCase> {
     if tc <= 0 || tc > 30 {
         return None;
     }
@@ -21,7 +21,7 @@ pub fn import_tc(tc: i32) -> Option<TestCase> {
     iter.next();
     for i in 1..tc + 1 {
         iter.next();
-        let actual_tc: i32 = iter
+        let actual_tc: i8 = iter
             .next()
             .expect("File ended before tc was found")
             .trim()
@@ -50,7 +50,7 @@ pub fn import_tc(tc: i32) -> Option<TestCase> {
 
         if actual_tc == tc {
             return Some(TestCase {
-                id: tc,
+                id: tc as i8,
                 n: h as usize,
                 col: col,
                 data: vec,
