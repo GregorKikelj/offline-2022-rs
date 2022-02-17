@@ -2,13 +2,13 @@ use crate::importer::TestCase;
 use std::collections::VecDeque;
 use rand::Rng;
 
-///Id, n, c(number of colors), col(node colors), edge(edges), 
+///Id, n, col(number of colors), c(vec colors), edge(edges), 
 pub struct ReducedTC{
   pub id: i8,
   pub n: usize,
   pub col: i32,
   pub c:Vec<i8>,
-  pub edge: Vec<Vec<i32>>, 
+  pub edge: Vec<Vec<i32>>,
 }
 
 impl ReducedTC{
@@ -83,10 +83,14 @@ impl ReducedTC{
       edge:edge,
     };
   }
+  pub fn print_adj(&self) {
+    for i in 0..self.n {
+      println!("{} {:?}", i, self.edge[i]);
+    }
+  }
 }
 
-
-fn add_color(tc:&ReducedTC, done:&mut Vec<bool>, col:i8) -> i32{
+pub fn add_color(tc:&ReducedTC, done:&mut Vec<bool>, col:i8) -> i32{
   let mut cnt=0;
   for i in 0..tc.n {
     if done[i] {
@@ -100,17 +104,46 @@ fn add_color(tc:&ReducedTC, done:&mut Vec<bool>, col:i8) -> i32{
   }
   return cnt;
 }
-pub fn random_move_solver(tc:ReducedTC) -> Vec<i8>{
+
+pub fn add_color2(tc:&ReducedTC, done:&mut Vec<bool>, col:i8) -> i32{
+  let mut cnt=0;
+  for i in 0..tc.n {
+    if !done[i] && tc.c[i as usize]==col {
+      for j in &tc.edge[i] {
+        if done[*j as usize] {
+          done[i as usize] = true;
+          cnt+=1;
+          break
+        }
+      }
+    }
+  }
+  return cnt;
+}
+
+pub fn random_move_solver_heuristics(tc:&ReducedTC, done:&mut Vec<bool>) -> Vec<i8>{
   let mut ans = vec![];
-  let mut done = vec![false; tc.n];
-  done[0]=true;
-  let mut cnt_done : i32 = 1;
+  let mut cnt_done : i32 = 0;
+  for c in done.iter(){
+    if *c {
+      cnt_done+=1;
+    }
+  }
+  let mut rthr = rand::thread_rng();
   while cnt_done < tc.n as i32 {
-    let color:i8 = (rand::thread_rng().gen_range(0..tc.col) + 1) as i8;
-    let d = add_color(&tc, &mut done, color);
-    cnt_done += d;
-    ans.push(color);
+    let i = rthr.gen_range(0..tc.n);
+    if !done[i] {
+      continue;
+    }
+    let pi = rthr.gen_range(0..tc.edge[i].len());
+    let j = tc.edge[i][pi];
+    if done[j as usize] {
+      continue;
+    }
+    let col = tc.c[j as usize];
+    let d = add_color2(&tc, done, col);
+    cnt_done+=d;
+    ans.push(col);
   }
   return ans;
 }
-
