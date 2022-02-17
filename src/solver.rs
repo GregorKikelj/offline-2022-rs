@@ -1,6 +1,6 @@
 use crate::importer::TestCase;
 use std::collections::VecDeque;
-use rand::Rng;
+use fastrand;
 
 ///Id, n, col(number of colors), c(vec colors), edge(edges), 
 pub struct ReducedTC{
@@ -129,13 +129,13 @@ pub fn random_move_solver_heuristics(tc:&ReducedTC, done:&mut Vec<bool>) -> Vec<
       cnt_done+=1;
     }
   }
-  let mut rthr = rand::thread_rng();
+  let rthr = fastrand::Rng::new();
   while cnt_done < tc.n as i32 {
-    let i = rthr.gen_range(0..tc.n);
+    let i = rthr.usize(0..tc.n);
     if !done[i] {
       continue;
     }
-    let pi = rthr.gen_range(0..tc.edge[i].len());
+    let pi = rthr.usize(0..tc.edge[i].len());
     let j = tc.edge[i][pi];
     if done[j as usize] {
       continue;
